@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* App-wide styles */
+:root {
+  --bg: #ffffff;
+  --fg: #0b0b0c;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  @apply bg-white text-[#0b0b0c] antialiased;
+}
+
+/* Reusable utility */
+.container-page {
+  @apply max-w-6xl mx-auto px-4 sm:px-6;
+}
+
+/* Button primitive (light variant + filled) */
+.btn {
+  @apply inline-flex items-center justify-center rounded-2xl px-5 py-2.5 font-medium transition shadow-soft;
+}
+.btn-primary {
+  @apply bg-[color:var(--btn-bg,theme(colors.tufts.blue))] text-white hover:opacity-90;
+}
+.btn-outline {
+  @apply border border-tufts-blue text-tufts-blue hover:bg-tufts-blue hover:text-white;
+}
