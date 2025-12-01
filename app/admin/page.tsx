@@ -4,10 +4,23 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 
+import type { User } from "@supabase/supabase-js";
+
+
+interface Order {
+  id: string;
+  name: string;
+  status: string;
+  items: { item: { name: string }; qty: number }[];
+  created_at: string;
+}
+
+
 export default function AdminPage() {
-  const router = useRouter();
-  const [user, setUser] = useState(null);
-  const [orders, setOrders] = useState([]);
+        const router = useRouter();
+
+        const [user, setUser] = useState<User | null>(null);     
+        const [orders, setOrders] = useState<Order[]>([]);
 
   // Load user
   useEffect(() => {

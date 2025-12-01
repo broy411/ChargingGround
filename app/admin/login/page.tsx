@@ -10,7 +10,8 @@ export default function AdminLoginPage() {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  async function handleLogin(e) {
+  async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
+
     e.preventDefault();
 
     const { data, error } = await supabase.auth.signInWithPassword({
