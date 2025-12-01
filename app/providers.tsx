@@ -1,7 +1,8 @@
 "use client";
 
 import { CartProvider } from "@/lib/CartContext";
+import { ReactNode } from "react";
+export default function RootLayout({ children }: { children: ReactNode }) {
 
-export default function Providers({ children }) {
   return <CartProvider>{children}</CartProvider>;
 }

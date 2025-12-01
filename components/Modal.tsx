@@ -1,6 +1,14 @@
 "use client";
 
-export default function Modal({ open, close, children }) {
+import { ReactNode } from "react";
+
+type ModalProps = {
+  open: boolean;
+  close: () => void;
+  children: ReactNode;
+};
+
+export default function Modal({ open, close, children }: ModalProps) {
   if (!open) return null;
 
   return (
@@ -12,9 +20,7 @@ export default function Modal({ open, close, children }) {
       />
 
       {/* Modal panel */}
-      <div
-        className="fixed inset-0 flex items-center justify-center z-[999]"
-      >
+      <div className="fixed inset-0 flex items-center justify-center z-[999]">
         <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-xl relative">
           
           {/* Close button */}
