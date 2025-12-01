@@ -1,14 +1,13 @@
 "use client";
-
 import { createContext, useContext, useState } from "react";
 
-export type MenuItem = {
+export type CartItem = {
   name: string;
   price: number;
-  image: string;
-  description: string;
-  calories: number;
-  macros: {
+  image?: string;
+  description?: string;
+  calories?: number;
+  macros?: {
     protein: number;
     carbs: number;
     fat: number;
@@ -16,13 +15,14 @@ export type MenuItem = {
 };
 
 export type CartEntry = {
-  item: MenuItem;
+  item: CartItem;
   qty: number;
 };
 
 type CartContextType = {
   cart: CartEntry[];
-  addToCart: (item: MenuItem) => void;
+  addToCart: (item: CartItem) => void;
+  decreaseQty: (name: string) => void;
   removeFromCart: (name: string) => void;
   clearCart: () => void;
 };
@@ -32,28 +32,37 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartEntry[]>([]);
 
-  // ✅ Correct addToCart
-  function addToCart(item: MenuItem) {
+  function addToCart(item: CartItem) {
     setCart((prev) => {
-      const existing = prev.find((entry) => entry.item.name === item.name);
-
+      const existing = prev.find((e) => e.item.name === item.name);
       if (existing) {
-        // Increase quantity if already in cart
         return prev.map((entry) =>
           entry.item.name === item.name
             ? { ...entry, qty: entry.qty + 1 }
             : entry
         );
       }
-
-      // Add new item
       return [...prev, { item, qty: 1 }];
     });
   }
 
-  // remove by item name (better than index)
+  function decreaseQty(name: string) {
+    setCart((prev) => {
+      const entry = prev.find((e) => e.item.name === name);
+      if (!entry) return prev;
+
+      if (entry.qty <= 1) {
+        return prev.filter((e) => e.item.name !== name);
+      }
+
+      return prev.map((e) =>
+        e.item.name === name ? { ...e, qty: e.qty - 1 } : e
+      );
+    });
+  }
+
   function removeFromCart(name: string) {
-    setCart((prev) => prev.filter((entry) => entry.item.name !== name));
+    setCart((prev) => prev.filter((e) => e.item.name !== name));
   }
 
   function clearCart() {
@@ -62,7 +71,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, clearCart }}
+      value={{ cart, addToCart, decreaseQty, removeFromCart, clearCart }}
     >
       {children}
     </CartContext.Provider>

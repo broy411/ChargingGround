@@ -9,7 +9,7 @@ type CartDrawerProps = {
 };
 
 export default function CartDrawer({ open, setOpen }: CartDrawerProps) {
-  const { cart, addToCart, removeFromCart, clearCart } = useCart();
+  const { cart, addToCart, decreaseQty, removeFromCart } = useCart();
 
   const total = cart.reduce(
     (sum, entry) => sum + entry.item.price * entry.qty,
@@ -36,6 +36,7 @@ export default function CartDrawer({ open, setOpen }: CartDrawerProps) {
             ✕
           </button>
         </div>
+
         <div className="p-4 space-y-4 overflow-y-auto h-[calc(100%-160px)]">
           {cart.length === 0 && (
             <p className="text-neutral-600 text-center mt-10">
@@ -43,9 +44,9 @@ export default function CartDrawer({ open, setOpen }: CartDrawerProps) {
             </p>
           )}
 
-          {cart.map((entry, idx) => (
+          {cart.map((entry) => (
             <div
-              key={idx}
+              key={entry.item.name}
               className="border rounded-xl p-3 flex justify-between items-center"
             >
               <div>
@@ -56,15 +57,17 @@ export default function CartDrawer({ open, setOpen }: CartDrawerProps) {
               </div>
 
               <div className="flex items-center gap-2">
+                {/* DECREASE */}
                 <button
                   className="px-2 py-1 bg-neutral-200 rounded"
-                  onClick={() => removeFromCart(idx)}
+                  onClick={() => decreaseQty(entry.item.name)}
                 >
                   -
                 </button>
 
                 <span className="font-semibold">{entry.qty}</span>
 
+                {/* INCREASE */}
                 <button
                   className="px-2 py-1 bg-neutral-200 rounded"
                   onClick={() => addToCart(entry.item)}
